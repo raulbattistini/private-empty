@@ -1,12 +1,10 @@
 package agent
 
 import (
-	"monitoring-agent/internal/collector"
-	"monitoring-agent/internal/exporter"
 	"os"
 	"time"
 
-	"github.com/stretchr/testify/assert/yaml"
+	"gopkg.in/yaml.v3" // Fix: wrong import
 )
 
 type CollectorConfig struct {
@@ -15,15 +13,14 @@ type CollectorConfig struct {
 }
 
 type ExporterConfig struct {
-	Enabled  bool          `yaml:"enabled"`
-	Endpoint time.Duration `yaml:"endpoint"`
+	Enabled  bool   `yaml:"enabled"`
+	Endpoint string `yaml:"endpoint"` // Fix: was time.Duration, should be string
 }
+
 type Config struct {
 	Collectors map[string]CollectorConfig `yaml:"collectors"`
 	Exporters  map[string]ExporterConfig  `yaml:"exporters"`
 }
-
-// avoiding 3rd parties as simple as the project is
 
 func LoadConfig(path string) (*Config, error) {
 	data, err := os.ReadFile(path)
@@ -37,31 +34,4 @@ func LoadConfig(path string) (*Config, error) {
 	}
 
 	return &cfg, nil
-}
-
-// helper factory funcs
-func BuildCollectors(cfg *Config) []collector.Collector {
-	var cols []collector.Collector
-	if c, ok := cfg.Collectors["cpu"]; ok && c.Enabled {
-		cols = append(cols, collector.NewCPUCollector(c.Interval))
-	}
-	if m, ok := cfg.Collectors["memory"]; ok && m.Enabled {
-		cols = append(cols, collector.NewMemCollector(m.Interval))
-	}
-	if n, ok := cfg.Collectors["net"]; ok && n.Enabled {
-		cols = append(cols, collector.NewNetCollector(n.Interval))
-	}
-
-	return cols
-}
-
-func BuildExporters(cfg *Config) []exporter.Exporter {
-	var exps []exporter.Exporter
-	if h, ok := cfg.Collectors["http"]; ok && h.Enabled {
-		exps = append(exps, exporter.NewHttpExporter(h.Endpoint))
-	}
-	if e, ok := cfg.Exporters["log"]; ok && e.Enabled {
-		exps = append(exps, exporter.NewLogExporter())
-	}
-	return exps
 }

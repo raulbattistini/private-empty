@@ -1,21 +1,23 @@
 package agent
 
 import (
-	"monitoring-agent/internal/collector"
-	"monitoring-agent/internal/event"
-	"monitoring-agent/internal/exporter"
+	"context"
 	"sync"
+
+	"github.com/raulbattistini/private-empty/internal/collector"
+	"github.com/raulbattistini/private-empty/internal/event"
+	"github.com/raulbattistini/private-empty/internal/exporter"
 )
 
 type Agent struct {
 	cfg        *Config
-	collectors []collector.Collector
+	collectors []collector.ICollector
 	exporters  []exporter.Exporter
 	eventCh    chan event.Event
 	wg         sync.WaitGroup
 }
 
-func (a *Agent) NewAgent(cfg *Config, collectors []collector.Collector, exporters []exporter.Exporter) *Agent {
+func NewAgent(cfg *Config, collectors []collector.ICollector, exporters []exporter.Exporter) *Agent {
 	return &Agent{
 		cfg:        cfg,
 		collectors: collectors,
@@ -24,16 +26,16 @@ func (a *Agent) NewAgent(cfg *Config, collectors []collector.Collector, exporter
 	}
 }
 
-func (a *Agent) Run(ctx context.context) error {
+func (a *Agent) Run(ctx context.Context) error {
 	for _, c := range a.collectors {
 		a.wg.Add(1)
-		go func(col collector.Collector) {
+		go func(col collector.ICollector) {
 			defer a.wg.Done()
 			col.Collect(ctx, a.eventCh)
 		}(c)
 	}
 
-	a.wg.Add(1)
+	defer a.wg.Wait()
 	go func() {
 		defer a.wg.Done()
 		for {

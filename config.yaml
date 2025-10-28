@@ -1,0 +1,17 @@
+collectors:
+  cpu:
+    enabled: true
+    interval: 2s
+  memory:
+    enabled: true
+    interval: 2s
+  net:
+    enabled: true
+    interval: 2s
+
+exporters:
+  log:
+    enabled: true
+  http:
+    enabled: false
+    endpoint: "http://localhost:8080/metrics"
