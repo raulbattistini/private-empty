@@ -18,12 +18,3 @@ const (
 )
 
 // just to map the enum
-
-type LogLevel int
-
-const (
-	DEBUG LogLevel = iota
-	INFO
-	WARN
-	ERROR
-)

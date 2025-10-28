@@ -7,11 +7,11 @@ import (
 	"time"
 
 	"github.com/raulbattistini/private-empty/internal/agent"
-	"github.com/raulbattistini/private-empty/internal/util"
+	"github.com/raulbattistini/private-empty/internal/util/logger"
 )
 
 func main() {
-	logger := util.Log()
+	logger := logger.Log()
 
 	if loc, err := time.LoadLocation("America/Sao_Paulo"); err == nil {
 		time.Local = loc
