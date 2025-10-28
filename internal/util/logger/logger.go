@@ -1,9 +1,18 @@
-package util
+package logger
 
 import (
 	"log"
 	"os"
 	"strings"
+)
+
+type LogLevel int
+
+const (
+	DEBUG LogLevel = iota
+	INFO
+	WARN
+	ERROR
 )
 
 var stringToLevel = map[string]LogLevel{

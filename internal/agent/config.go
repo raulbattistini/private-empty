@@ -4,6 +4,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/raulbattistini/private-empty/internal/util"
+	"github.com/raulbattistini/private-empty/internal/util/logger"
 	"gopkg.in/yaml.v3" // Fix: wrong import
 )
 
@@ -27,6 +29,8 @@ func LoadConfig(path string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+	currentOS := util.ParseRuntimeOS()
+	logger.Log().Info("Agent starting on detected OS: %s", currentOS)
 
 	var cfg Config
 	if err := yaml.Unmarshal(data, &cfg); err != nil {
