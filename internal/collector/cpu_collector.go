@@ -7,6 +7,7 @@ import (
 
 	"github.com/raulbattistini/private-empty/internal/event"
 	"github.com/raulbattistini/private-empty/internal/util"
+	"github.com/raulbattistini/private-empty/internal/util/metrics"
 )
 
 type CPUCollector struct {
@@ -32,7 +33,7 @@ func (c *CPUCollector) Collect(ctx context.Context, out chan<- event.Event) {
 		case <-ctx.Done():
 			return
 		case <-ticker.C:
-			usage := util.GetCPUUsage()
+			usage := metrics.GetCPUUsage()
 			msg := fmt.Sprintf("CPU usage: %.2f%%", usage)
 
 			sev := util.Info

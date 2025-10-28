@@ -3,11 +3,11 @@ package collector
 import (
 	"context"
 	"fmt"
-	"runtime"
 	"time"
 
 	"github.com/raulbattistini/private-empty/internal/event"
 	"github.com/raulbattistini/private-empty/internal/util"
+	"github.com/raulbattistini/private-empty/internal/util/metrics"
 )
 
 type MemoryCollector struct {
@@ -33,8 +33,8 @@ func (mem *MemoryCollector) Collect(ctx context.Context, out chan<- event.Event)
 		case <-ctx.Done():
 			return
 		case <-ticker.C:
-			usage := runtime.MemProfileRate
-			msg := fmt.Sprintf("Mmemory usage: %.2d%%", usage)
+			usage := metrics.GetMemoryUsagePercent()
+			msg := fmt.Sprintf("Mmemory usage: %.2f%%", usage)
 
 			sev := util.Info
 			if usage > 85 {
