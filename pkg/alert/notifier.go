@@ -2,6 +2,7 @@ package alert
 
 import (
 	"fmt"
+	"sync"
 	"time"
 
 	beep "github.com/faiface/beep"
@@ -13,6 +14,7 @@ import (
 )
 
 var GlobalSampleRate = beep.SampleRate(44100)
+var audioOnce sync.Once
 
 func initSpeaker() {
 	log := logger.Log()
