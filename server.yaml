@@ -1,0 +1,11 @@
+server:
+  metrics:
+    cpu:
+      enabled: true
+    memory:
+      enabled: true
+    net:
+      enabled: true
+  addr:
+    host: "localhost"
+    port: 8080 
