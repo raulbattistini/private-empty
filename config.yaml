@@ -1,17 +1,20 @@
 collectors:
   cpu:
     enabled: true
-    interval: 2s
+    interval: 7s
   memory:
     enabled: true
-    interval: 2s
+    interval: 7s
   net:
-    enabled: true
-    interval: 2s
+    enabled: true 
+    interval: 7s
 
 exporters:
   log:
     enabled: true
   http:
     enabled: false
-    endpoint: "http://localhost:8080/metrics"
+    endpoint: "http://localhost:8000"
+
+notification:
+  annoying: true

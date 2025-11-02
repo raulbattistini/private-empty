@@ -20,8 +20,11 @@ type ExporterConfig struct {
 }
 
 type Config struct {
-	Collectors map[string]CollectorConfig `yaml:"collectors"`
-	Exporters  map[string]ExporterConfig  `yaml:"exporters"`
+	Collectors   map[string]CollectorConfig `yaml:"collectors"`
+	Exporters    map[string]ExporterConfig  `yaml:"exporters"`
+	Notification struct {
+		Annoying bool `yaml:"annoying"`
+	}
 }
 
 func LoadConfig(path string) (*Config, error) {
