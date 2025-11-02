@@ -4,13 +4,23 @@
 Also features: a light API in Gin also displays the data as well (WIP). Supports a (almost) graceful shutdown, communication with channels handling mutexes.
 
 #### How to run the app:
+1. To run the project
 ```bash
-    go mod tidy &&
-    go run cmd/agent/main.go
+  go version # important to check the installed version
+```
+
+2. Install deps
+```bash
+  go mod tidy
+```
+
+3. Run the project (wait a few seconds till it logs the CLI)
+```bash
+  go run `cmd/agent/main.go`
 ```
 
 #### Disclaimers:
-* Values for threshold as low as 0.5% are used to mock as in
+1. Values for threshold as low as 0.5% are used to mock as in
 ```go
 	alerter := alert.NewAlerter()
 	alerter.AddRule(alert.Rule{
@@ -40,7 +50,7 @@ Also features: a light API in Gin also displays the data as well (WIP). Supports
 	})
 // rest of the code
 ```
-and so is the timeout to collect new hardware information -- which should be more frequent than the current arbitrary values on `config.yaml` (adjust as per your needs):
+2. and so is the timeout to collect new hardware information -- which should be more frequent than the current arbitrary values on `config.yaml` (adjust as per your needs):
 ```yaml
 collectors:
   cpu:
@@ -54,6 +64,7 @@ collectors:
     interval: 7s
 # other configs
 ```
+3. And also values used for most metrics are simulated trying to keep as real as possible, OS-specific code would require some platform-bound code. (it might be added later on still)
 
 #### TODO: 
 1. Notify based on percentages instead of absolute values
@@ -62,3 +73,5 @@ collectors:
 4. `Makefile`, Docker support
 5. Clean up folder architecture
 
+
+#### App's general flow is `Collectors → eventChannel → Agent (holding dispatcher logic - could be decoupled into `events` too) → Exporters`
